@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CY489: Component Security - Interactive Syllabus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        /* Navigation Sidebar */
+        .nav-sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .nav-header {
+            text-align: center;
+            padding: 0 20px 30px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+
+        .nav-header h1 {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .nav-header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin: 5px 0;
+        }
+
+        .nav-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background: rgba(255,255,255,0.1);
+            border-left-color: white;
+            padding-left: 25px;
+        }
+
+        .nav-menu .sub-menu {
+            margin-left: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+        }
+
+        .section-content {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .section-header .credits {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Cards and Info Boxes */
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #2a5298;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        /* Tables */
+        .grading-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .grading-table th {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .grading-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .grading-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .percentage {
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        /* Course Outcomes */
+        .outcome-list {
+            counter-reset: outcome-counter;
+        }
+
+        .outcome-item {
+            counter-increment: outcome-counter;
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2a5298;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .outcome-item::before {
+            content: counter(outcome-counter);
+            position: absolute;
+            left: -15px;
+            top: 20px;
+            background: #2a5298;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .outcome-item h4 {
+            margin-bottom: 10px;
+            color: #1e3c72;
+        }
+
+        /* Assignment Cards */
+        .assignment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .assignment-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #2a5298;
+            transition: transform 0.3s ease;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .assignment-card h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .points {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Contact Info */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #2a5298;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .nav-sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
+        .text-blue { color: #1976d2; }
+        .text-bold { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Sidebar -->
+        <nav class="nav-sidebar">
+            <div class="nav-header">
+                <h1>CY489</h1>
+                <p>Component Security</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#overview" class="nav-link active" onclick="showSection('overview')">Course Overview</a></li>
+                <li><a href="#faculty" class="nav-link" onclick="showSection('faculty')">Faculty & Contact</a></li>
+                <li><a href="#outcomes" class="nav-link" onclick="showSection('outcomes')">Course Outcomes</a></li>
+                <li><a href="#grading" class="nav-link" onclick="showSection('grading')">Grading Scale</a></li>
+                <li><a href="#assignments" class="nav-link" onclick="showSection('assignments')">Assignments</a></li>
+                <li class="sub-menu">
+                    <a href="#discussion" class="nav-link" onclick="showSection('discussion')">Discussion Posts</a>
+                    <a href="#hands-on" class="nav-link" onclick="showSection('hands-on')">Hands-On Skills</a>
+                    <a href="#virtual-lab" class="nav-link" onclick="showSection('virtual-lab')">Virtual Labs</a>
+                    <a href="#knowledge-check" class="nav-link" onclick="showSection('knowledge-check')">Knowledge Checks</a>
+                    <a href="#team-project" class="nav-link" onclick="showSection('team-project')">Team Project</a>
+                </li>
+                <li><a href="#policies" class="nav-link" onclick="showSection('policies')">Course Policies</a></li>
+                <li><a href="#university" class="nav-link" onclick="showSection('university')">University Policies</a></li>
+                <li><a href="#support" class="nav-link" onclick="showSection('support')">Support Services</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="section active">
+                <div class="section-header">
+                    <h2>CY489: Component Security</h2>
+                    <div class="credits">5 Credits | School of Technology & Computing | Undergraduate Course</div>
+                </div>
+                <div class="section-content">
+                    <div class="highlight-box">
+                        <strong>Important Requirements:</strong>
+                        <ul>
+                            <li>Access to the Internet is required</li>
+                            <li>All written assignments must be in Microsoft-Word-compatible formats</li>
+                            <li>See the library's APA Style Guide tutorial for formatting resources</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Course Description</h3>
+                        <p>This course provides an in-depth examination of component security in cloud computing environments. Drawing on guidelines and best practices outlined by the Cloud Security Alliance, students gain competencies in secure software development, identity management, encryption methods, and other critical cloud security topics.</p>
+                        <p>Students build expertise in assessing and mitigating vulnerabilities in cloud components like operating systems, hypervisors, orchestration engines, and more. Upon successful completion of this course, students will be prepared to sit for the Certificate of Cloud Security Knowledge certification exam.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Course Resources</h3>
+                        <p>Required and recommended resources to complete coursework and assignments are found on the course <strong>Reading List</strong>. The reading list can be found under Course Information in Brightspace as well as from the library homepage.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Note:</strong> Required resources that must be purchased by the student are tagged "Purchase from a vendor of your choosing." Required resources with a direct link, "Available through CityU Library", are available at no cost to students.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Faculty Section -->
+            <section id="faculty" class="section">
+                <div class="section-header">
+                    <h2>Faculty Information & Contact</h2>
+                </div>
+                <div class="section-content">
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <h4>Instructor Information</h4>
+                            <p>Professional experience information for instructors can be found under:</p>
+                            <p><strong>Content → Syllabus, Schedule, and Course Team → Meet Your Instructor</strong> in the online course menu.</p>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <h4>Contact Information</h4>
+                            <p>Contact information for instructors can be found in the online course menu. Additional contact information includes:</p>
+                            <ul>
+                                <li>Teaching Assistant (TA)</li>
+                                <li>Program Manager</li>
+                                <li>Program Director</li>
+                                <li>Dean</li>
+                            </ul>
+                            <p>Hyperlinks on the contact page direct students to weekly office hours.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Outcomes -->
+            <section id="outcomes" class="section">
+                <div class="section-header">
+                    <h2>Course Outcomes</h2>
+                </div>
+                <div class="section-content">
+                    <p>As a result of this course, students will:</p>
+                    <div class="outcome-list">
+                        <div class="outcome-item">
+                            <h4>Component Security Fundamentals</h4>
+                            <p>Explain component security in cloud service models, component lifecycle, and supply chain management security.</p>
+                        </div>
+                        <div class="outcome-item">
+                            <h4>Governance and Risk Management</h4>
+                            <p>Describe Governance and Enterprise Risk Management, Contracts and Electronic Discovery, legal, compliance and audit management frameworks in the cloud environment.</p>
+                        </div>
+                        <div class="outcome-item">
+                            <h4>Secure Development Analysis</h4>
+                            <p>Analyze secure component development for a software application.</p>
+                        </div>
+                        <div class="outcome-item">
+                            <h4>Cloud Structure Evaluation</h4>
+                            <p>Evaluate secure cloud structures, processes, and services.</p>
+                        </div>
+                        <div class="outcome-item">
+                            <h4>Application Security Assessment</h4>
+                            <p>Evaluate a software application using secure components in the cloud.</p>
+                        </div>
+                        <div class="outcome-item">
+                            <h4>Architecture Planning</h4>
+                            <p>Create a secure cloud architecture plan.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Grading Scale -->
+            <section id="grading" class="section">
+                <div class="section-header">
+                    <h2>Grading Scale & Overview</h2>
+                </div>
+                <div class="section-content">
+                    <p>The grades earned for the course will be calculated using City University of Seattle's decimal grading system, found in the current University Catalog.</p>
+                    
+                    <table class="grading-table">
+                        <thead>
+                            <tr>
+                                <th>Assignment Category</th>
+                                <th>Percentage</th>
+                                <th>Points</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="background: #e3f2fd; font-weight: bold; text-align: center;">Instructor Determined Assignments (20%)</td>
+                            </tr>
+                            <tr>
+                                <td>The Muddiest Point (MP)</td>
+                                <td class="percentage">5%</td>
+                                <td>50 points</td>
+                                <td>5 points × 10 modules</td>
+                            </tr>
+                            <tr>
+                                <td>Concept Debate (CD)</td>
+                                <td class="percentage">5%</td>
+                                <td>50 points</td>
+                                <td>5 points × 10 modules</td>
+                            </tr>
+                            <tr>
+                                <td>Knowledge Check (KC)</td>
+                                <td class="percentage">10%</td>
+                                <td>100 points</td>
+                                <td>10 points × 10 modules</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="background: #e8f5e8; font-weight: bold; text-align: center;">Major Assignments (80%)</td>
+                            </tr>
+                            <tr>
+                                <td>Hands-On Skill (HOS)</td>
+                                <td class="percentage">20%</td>
+                                <td>200 points</td>
+                                <td>20 points × 10 modules</td>
+                            </tr>
+                            <tr>
+                                <td>Virtual Lab (VL)</td>
+                                <td class="percentage">40%</td>
+                                <td>400 points</td>
+                                <td>40 points × 10 modules</td>
+                            </tr>
+                            <tr>
+                                <td>Team Project (TP)</td>
+                                <td class="percentage">20%</td>
+                                <td>200 points</td>
+                                <td>Proposal: 30, Progress: 70, Final Report: 70, Presentation: 30</td>
+                            </tr>
+                            <tr style="background: #fff3e0; font-weight: bold;">
+                                <td>TOTAL</td>
+                                <td class="percentage">100%</td>
+                                <td>1,000 points</td>
+                                <td>All assignments combined</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Assignments Overview -->
+            <section id="assignments" class="section">
+                <div class="section-header">
+                    <h2>Course Assignments Overview</h2>
+                </div>
+                <div class="section-content">
+                    <p>The instructor will provide grading rubrics explaining how each assignment will be graded.</p>
+                    
+                    <div class="assignment-grid">
+                        <div class="assignment-card">
+                            <h4>Discussion Activities</h4>
+                            <p>Participate in weekly Muddiest Point (MP) and Concept Debate (CD) discussions to engage with course content and peers.</p>
+                            <div class="points">10% Total</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>Hands-On Skills</h4>
+                            <p>Practice exercises with programming languages, APIs, and tools related to cloud security components.</p>
+                            <div class="points">20% Total</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>Virtual Labs</h4>
+                            <p>Complete cloud-based lab activities with systematic instructions and challenge activities.</p>
+                            <div class="points">40% Total</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>Knowledge Checks</h4>
+                            <p>Weekly quizzes measuring knowledge concepts. Focus on principles rather than memorization.</p>
+                            <div class="points">10% Total</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>Team Project</h4>
+                            <p>Collaborative project designing secure cloud-based applications with proposal, progress reports, and final presentation.</p>
+                            <div class="points">20% Total</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Discussion Posts -->
+            <section id="discussion" class="section">
+                <div class="section-header">
+                    <h2>Discussion Posts: MP & CD</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>The Muddiest Point (MP)</h3>
+                        <p><strong>Purpose:</strong> Stimulate student engagement and assess understanding of required readings.</p>
+                        <p><strong>Requirements:</strong> Write a paragraph explaining the most confusing part of the upcoming module content. If you understand all concepts, explain the most exciting aspect instead.</p>
+                        
+                        <table class="grading-table">
+                            <thead>
+                                <tr><th>Criteria</th><th>Percentage</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Participation</td><td class="percentage">80%</td></tr>
+                                <tr><td>Writing</td><td class="percentage">20%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Concept Debate (CD)</h3>
+                        <p><strong>Purpose:</strong> Apply key concepts through problem-solving and peer discussion.</p>
+                        <p><strong>Process:</strong></p>
+                        <ol>
+                            <li>Submit initial answer with justification</li>
+                            <li>Discuss responses with classmates</li>
+                            <li>Re-submit final answer after collaboration</li>
+                            <li>Review correct answer through Weekly Announcements</li>
+                        </ol>
+                        
+                        <table class="grading-table">
+                            <thead>
+                                <tr><th>Criteria</th><th>Percentage</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Participation</td><td class="percentage">50%</td></tr>
+                                <tr><td>Writing</td><td class="percentage">50%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>Discussion Requirements:</strong>
+                        <ul>
+                            <li>Post weekly discussion topic response</li>
+                            <li>Respond to two other students' posts by module end</li>
+                            <li>Use clear, thoughtful comments with correct grammar</li>
+                            <li>Include references with APA formatting</li>
+                            <li>Maintain professional tone</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hands-On Skills -->
+            <section id="hands-on" class="section">
+                <div class="section-header">
+                    <h2>Hands-On Skill (HOS)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>Assignment Overview</h3>
+                        <p>Hands-On Skill exercises are assigned to pairs of students or individually for online learners. These exercises focus on learning specific programming languages, APIs, or tools related to programming assignments and virtual labs.</p>
+                        
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Collaborative pair programming (in-class) or individual practice (online)</li>
+                            <li>Focus on practical application of security tools and techniques</li>
+                            <li>Direct connection to Virtual Lab requirements</li>
+                            <li>Skill-building for real-world cloud security scenarios</li>
+                        </ul>
+                    </div>
+
+                    <table class="grading-table">
+                        <thead>
+                            <tr><th>Criteria</th><th>Percentage</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Practice Exercise</td><td class="percentage">80%</td></tr>
+                            <tr><td>Engagement</td><td class="percentage">20%</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="points" style="margin-top: 20px;">20 points per module × 10 modules = 200 points total</div>
+                </div>
+            </section>
+
+            <!-- Virtual Labs -->
+            <section id="virtual-lab" class="section">
+                <div class="section-header">
+                    <h2>Virtual Lab (VL)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>Lab Overview</h3>
+                        <p>Students complete cloud-based lab activities that directly support course concepts. Labs involve viewing instructional documents and following systematic instructions with embedded challenge activities.</p>
+                        
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Cloud-based hands-on experience</li>
+                            <li>Systematic instruction with challenge activities</li>
+                            <li>Unlimited attempts to increase accuracy and skill development</li>
+                            <li>Detailed write-ups of understanding and findings required</li>
+                        </ul>
+                    </div>
+
+                    <table class="grading-table">
+                        <thead>
+                            <tr><th>Criteria</th><th>Percentage</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Accuracy</td><td class="percentage">40%</td></tr>
+                            <tr><td>Domain Knowledge</td><td class="percentage">40%</td></tr>
+                            <tr><td>Writing</td><td class="percentage">20%</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="highlight-box">
+                        <strong>Important:</strong> You have unlimited attempts at each lab to improve your accuracy and learn the required skills. Focus on understanding the concepts rather than just completing the tasks.
+                    </div>
+
+                    <div class="points" style="margin-top: 20px;">40 points per module × 10 modules = 400 points total</div>
+                </div>
+            </section>
+
+            <!-- Knowledge Checks -->
+            <section id="knowledge-check" class="section">
+                <div class="section-header">
+                    <h2>Knowledge Check (KC)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>Quiz Overview</h3>
+                        <p>Weekly quizzes measure knowledge concepts acquired throughout each module. The focus is on underlying principles and concepts rather than memorization.</p>
+                        
+                        <h4>Quiz Guidelines:</h4>
+                        <ul>
+                            <li>Maximum of 2 attempts per Knowledge Check</li>
+                            <li>Focus on principles and concepts, not memorization</li>
+                            <li>Cover material from readings, lectures, and labs</li>
+                            <li>Designed to reinforce learning objectives</li>
+                        </ul>
+                    </div>
+
+                    <table class="grading-table">
+                        <thead>
+                            <tr><th>Criteria</th><th>Percentage</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Correctness</td><td class="percentage">100%</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="points" style="margin-top: 20px;">10 points per module × 10 modules = 100 points total</div>
+                </div>
+            </section>
+
+            <!-- Team Project -->
+            <section id="team-project" class="section">
+                <div class="section-header">
+                    <h2>Team Project (TP)</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>Project Description: Secure Cloud-Based Application Design</h3>
+                        <p>This project provides students with an opportunity to explore the principles and practices of designing a secure cloud-based application, aligning with the Certificate of Cloud Security Knowledge (CCSK) objectives.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Project Focus:</strong> Documentation and presentation of design and security considerations for a fictional cloud-based application, rather than actual implementation.
+                        </div>
+
+                        <h4>Team Requirements:</h4>
+                        <ul>
+                            <li>Teams of 2-3 members</li>
+                            <li>Projects must be approved by instructor</li>
+                            <li>Choose from diverse fictional organization scenarios</li>
+                            <li>Weekly incremental development with instructor feedback</li>
+                        </ul>
+                    </div>
+
+                    <div class="assignment-grid">
+                        <div class="assignment-card">
+                            <h4>TP01: Proposal</h4>
+                            <p>Initial project proposal outlining the fictional organization and security challenges to address.</p>
+                            <div class="points">30 Points</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>TP02: Progress Report</h4>
+                            <p>Mid-project progress report showing development and incorporating instructor feedback.</p>
+                            <div class="points">70 Points</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>TP03: Final Report</h4>
+                            <p>Comprehensive 7-8 page final report documenting the complete secure cloud architecture design.</p>
+                            <div class="points">70 Points</div>
+                        </div>
+                        
+                        <div class="assignment-card">
+                            <h4>TP04: Final Presentation</h4>
+                            <p>15-minute presentation with 5 minutes for Q&A, showcasing project outcomes and findings.</p>
+                            <div class="points">30 Points</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Academic Integrity Requirements</h3>
+                        <p>Students must utilize assigned readings, videos, and additional external sources. All sources must be properly cited using APA formatting. Templates are provided for each project element.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Important:</strong> Failure to properly cite sources constitutes plagiarism and violates CityU Academic Integrity Policy. Check the "Avoid Plagiarism Guide" for assistance.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Policies -->
+            <section id="policies" class="section">
+                <div class="section-header">
+                    <h2>Course Policies</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>General Course Policies</h3>
+                        <p>Course policies on topics such as <em>Late Assignments</em>, <em>Participation</em>, and <em>Professional Writing</em> are found under <strong>Course Information</strong> in the online course menu. Students are responsible for reviewing and applying these policies while enrolled in this course.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>AI and Language Model Policy</h3>
+                        <p>In the School of Technology and Computing, this policy underscores the importance of responsible use of learning language models, like ChatGPT, in academic pursuits.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Approved Use:</strong> Language models may be used for grammar and proofreading only, with transparent attribution.
+                            <br><br>
+                            <strong>Prohibited Use:</strong> These tools must not replace fundamental processes of learning, researching, critical thinking, and problem-solving.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- University Policies -->
+            <section id="university" class="section">
+                <div class="section-header">
+                    <h2>University Policies</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-card">
+                        <h3>Academic Policies Overview</h3>
+                        <p>Students are responsible for understanding and adhering to all of City University of Seattle's academic policies. The most current versions of these policies can be found in the <a href="http://www.cityu.edu/catalog/" target="_blank">University Catalog</a>.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Non-Discrimination & Title IX</h3>
+                        <p>City University of Seattle adheres to all federal, state, and local civil rights laws prohibiting discrimination. The University is committed to ensuring an education environment bound by standards of mutual respect and safety.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Protected Categories:</strong> Race, color, ethnicity, sexual orientation, gender identification, socioeconomic status, religious values, sex/gender, pregnancy, and parenting status.
+                        </div>
+                        
+                        <p>Sexual harassment, sexual assault, dating and domestic violence, and stalking are prohibited. Questions regarding Title IX should be directed to the Title IX Coordinator.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Academic Integrity</h3>
+                        <p>Academic integrity requires scholarly activity free from fraud, deception, and unauthorized collaboration. Students must understand and adhere to CityU's academic integrity standards.</p>
+                        
+                        <p><strong>Key Requirement:</strong> Students must cite sources of all ideas, facts, and information that are not their own, even when paraphrased.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Attendance Policy</h3>
+                        <p>Students are expected to be diligent in their studies and attend class regularly. Regular attendance is important for achieving learning outcomes and may be considered in determining final grades.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Attendance Definition:</strong>
+                            <ul>
+                                <li><strong>Physical Classes:</strong> Present at any time during class session</li>
+                                <li><strong>Online Classes:</strong> Posted or submitted an assignment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Support Services -->
+            <section id="support" class="section">
+                <div class="section-header">
+                    <h2>Support Services</h2>
+                </div>
+                <div class="section-content">
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <h4>Disability Support Services</h4>
+                            <p>Students with documented disabilities are encouraged to contact Disability Support Services to discuss accommodation requests.</p>
+                            <p><strong>Contact:</strong> disability@cityu.edu | 206.239.4752</p>
+                            <p>Confidentiality is observed in all inquiries.</p>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <h4>Library Services</h4>
+                            <p>CityU librarians help students find resources needed for course success.</p>
+                            <p><strong>Available:</strong> 24/7 through "Ask a Librarian" service and online library resources.</p>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <h4>Online Tutoring</h4>
+                            <p>Free online tutoring through Brainfuse, including writing support from certified tutors.</p>
+                            <p><strong>Available:</strong> 24 hours a day, seven days a week</p>
+                            <p>Access through my.cityu.edu portal</p>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <h4>Religious Accommodations</h4>
+                            <p>Washington state law requires accommodation for student absences due to reasons of faith, conscience, or religious activities.</p>
+                            <p><strong>Deadline:</strong> Request within first two weeks using Religious Accommodations Request Form</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // JavaScript for navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show the selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Add active class to the clicked nav link
+            const activeLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // Scroll to top of main content
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show overview section by default
+            showSection('overview');
+            
+            // Add smooth scrolling for better UX
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            });
+        });
+
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to assignment cards
+            const assignmentCards = document.querySelectorAll('.assignment-card');
+            assignmentCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                });
+            });
+
+            // Add click animation to info cards
+            const infoCards = document.querySelectorAll('.info-card');
+            infoCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
